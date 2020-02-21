@@ -11,7 +11,7 @@ setup(
     install_requires=['requests','nose','requests-mock[fixture]','testtools','twine'],
     url='https://github.com/kapwing/amplitude-python',
     author='kapwing',
-    author_email='atveit@gmail.com',
+    author_email='hello@kapwing.com',
     license='Apache License 2.0',
     classifiers=[
         'Development Status :: 3 - Alpha',
