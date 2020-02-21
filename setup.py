@@ -2,15 +2,15 @@ from setuptools import setup, find_packages
 
 setup(
     name='amplitude-python',
-    keywords='python wrapper for amplitude.com HTTP API',
-    version='0.12',
+    keywords='python client for amplitude.com (based on HTTP API V2)',
+    version='1.0.0',
     packages=find_packages(),
     long_description=open('README.txt').read(),
     test_suite='nose.collector',
     tests_require=['nose'],
     install_requires=['requests','nose','requests-mock[fixture]','testtools','twine'],
-    url='https://github.com/atveit/amplitude-python',
-    author='Amund Tveit',
+    url='https://github.com/kapwing/amplitude-python',
+    author='kapwing',
     author_email='atveit@gmail.com',
     license='Apache License 2.0',
     classifiers=[
