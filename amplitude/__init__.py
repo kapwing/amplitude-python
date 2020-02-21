@@ -23,8 +23,6 @@ class AmplitudeLogger:
         return value is None or type(value) is not str
 
     def create_event(self, **kwargs):
-        event = dict()
-
         device_id = kwargs.get('device_id', None)
         event_type = kwargs.get('event_type', None)
         user_id = kwargs.get('user_id', None)
@@ -35,8 +33,10 @@ class AmplitudeLogger:
         if self._is_none_or_not_str(user_id) and self._is_none_or_not_str(device_id):
             return None
 
-        event['event_type'] = event_type
-        event['time'] = int(time.time() * 1000)
+        event = dict(
+            event_type=event_type,
+            time=int(time.time() * 1000),
+        )
 
         if device_id:
             event['device_id'] = device_id
@@ -44,13 +44,10 @@ class AmplitudeLogger:
         if user_id:
             event['user_id'] = user_id
 
-        user_properties = kwargs.get('user_properties', None)
-        if isinstance(user_properties, dict):
-            event['user_properties'] = user_properties
-
-        event_properties = kwargs.get('event_properties', None)
-        if isinstance(event_properties, dict):
-            event['event_properties'] = event_properties
+        for key in ['event_properties', 'user_properties']:
+            value = kwargs.get(key, None)
+            if isinstance(value, dict):
+                event[key] = value
 
         return event
 
