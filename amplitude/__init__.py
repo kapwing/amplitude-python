@@ -27,12 +27,13 @@ class AmplitudeLogger:
             raise ValueError('Missing both device & user Ids, at least one must be provided')
 
         event.setdefault('time', int(time.time() * 1000))
+
         return event
 
     def log(self, **kwargs):
         options = kwargs.pop('options', None)
 
-        event = self.create_event(**kwargs)
+        event = self.prepare_event(**kwargs)
         return self.send_event(event, options=options)
 
     def send_event(self, event, options=None):
