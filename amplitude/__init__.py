@@ -19,52 +19,33 @@ class AmplitudeLogger:
         self.api_url = api_url
         self.enabled = True
 
-    def create_event(self, **kwargs):
-        device_id = kwargs.get('device_id')
-        event_type = kwargs.get('event_type')
-        user_id = kwargs.get('user_id')
+    def prepare_event(self, **event):
+        if not event.get('event_type'):
+            raise ValueError('Missing event type')
 
-        if not isinstance(event_type, str):
-            return None
+        if not (event.get('device_id') or event.get('user_id')):
+            raise ValueError('Missing both device & user Ids, at least one must be provided')
 
-        if not (isinstance(device_id, str) or isinstance(device_id, str)):
-            return None
-
-        event = dict(
-            event_type=event_type,
-            time=int(time.time() * 1000),
-        )
-
-        if device_id:
-            event['device_id'] = device_id
-
-        if user_id:
-            event['user_id'] = user_id
-
-        for key in ['event_properties', 'user_properties']:
-            value = kwargs.get(key)
-            if not isinstance(value, dict):
-                continue
-
-            event[key] = value
-
+        event.setdefault('time', int(time.time() * 1000))
         return event
 
     def log(self, **kwargs):
-        event = self.create_event(**kwargs)
-        return self.send_event(event)
+        options = kwargs.pop('options', None)
 
-    def send_event(self, event):
+        event = self.create_event(**kwargs)
+        return self.send_event(event, options=options)
+
+    def send_event(self, event, options=None):
         if not (self.enabled and event):
             return
 
-        return self.send_events([event])
+        return self.send_events([event], options=options)
 
-    def send_events(self, events):
+    def send_events(self, events, options=None):
         if not (self.enabled and events):
             return
 
         return requests.post(
             self.api_url,
-            json=dict(api_key=self.api_key, events=events)
+            json=dict(api_key=self.api_key, events=events, options=options)
         )
