@@ -54,13 +54,17 @@ class AmplitudeLogger:
 
         return event
 
-    def log_events(self, events):
+    def log(self, **kwargs):
+        event = self.create_event(**kwargs)
+        self.send_event(event)
+
+    def send_event(self, event):
         if not (self.enabled and event):
             return
 
-        return self.log_events([event])
+        return self.send_events([event])
 
-    def log_events(self, events):
+    def send_events(self, events):
         if not (self.enabled and event):
             return
 
